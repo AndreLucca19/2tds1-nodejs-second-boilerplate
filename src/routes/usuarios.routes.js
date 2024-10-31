@@ -1,12 +1,11 @@
 import { Router } from "express";
-import UsersRepository from "../models/users/UsersRepository.js";
+import UsersRepository from "../molsdes/users/UsersRepository.js";
 
 const usuariosRoutes = Router();
-
-const usersRepository = new UsersRepository();
+const userList = new UsersRepository();
 
 usuariosRoutes.get("/", (req, res) => {
-    const usuarios = usersRepository.getAllUsers();
+    const usuarios = userList.getAllusers();
 
     return res.status(200).json({
         message:
@@ -14,6 +13,16 @@ usuariosRoutes.get("/", (req, res) => {
                 ? "Não há usuários cadastrados"
                 : `Total de usuários: ${usuarios.length}`,
         usuarios,
+    });
+});
+usuariosRoutes.post("/", (req, res) => {
+    const { name, email, password } = req.body;
+
+    const usuario = userList.addUser(name, email, password);
+
+    return res.status(201).json({
+        message: "Usuário cadastrado com sucesso!",
+        usuario,     
     });
 });
 
